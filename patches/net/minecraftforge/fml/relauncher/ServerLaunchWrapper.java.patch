@@ -6,6 +6,7 @@
  
 +import org.magmafoundation.magma.configuration.MagmaConfig;
 +import org.magmafoundation.magma.downloads.DownloadServerFiles;
++import org.magmafoundation.magma.downloads.LibraryDownloader;
 +import org.magmafoundation.magma.downloads.MagmaUpdater;
 +
  import java.lang.reflect.Method;
@@ -41,9 +42,8 @@
 +
 +      DownloadServerFiles.downloadMinecraftServer();
 +
-+      if(DownloadServerFiles.getLibrariesVersion()){
-+          DownloadServerFiles.downloadServerLibraries();
-+      }
++        LibraryDownloader libraryDownloader = new LibraryDownloader();
++        libraryDownloader.run();
 +
 +      if(!LAUNCH_ARGS.contains("-dau")) {
 +          System.out.println("Checking for new version...");

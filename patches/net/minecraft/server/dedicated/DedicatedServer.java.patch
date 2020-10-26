@@ -74,17 +74,17 @@
          Thread thread = new Thread("Server Infinisleeper")
          {
              {
-@@ -96,23 +104,66 @@
+@@ -96,23 +104,67 @@
          {
              public void run()
              {
--                if (net.minecraftforge.server.console.TerminalHandler.handleCommands(DedicatedServer.this)) return;
--                BufferedReader bufferedreader = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));
 +                if (!Main.useConsole) {
 +                    return;
 +                }
 +                // Paper start - Use TerminalConsoleAppender
 +                new com.destroystokyo.paper.console.PaperConsole(DedicatedServer.this).start();
+                 if (net.minecraftforge.server.console.TerminalHandler.handleCommands(DedicatedServer.this)) return;
+-                BufferedReader bufferedreader = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));
 +                /*
 +                jline.console.ConsoleReader bufferedreader = reader;
                  String s4;
@@ -148,7 +148,7 @@
          thread.setDaemon(true);
          thread.start();
          LOGGER.info("Starting minecraft server version 1.12.2");
-@@ -125,7 +176,7 @@
+@@ -125,7 +177,7 @@
          net.minecraftforge.fml.common.FMLCommonHandler.instance().onServerStart(this);
  
          LOGGER.info("Loading properties");
@@ -157,7 +157,7 @@
          this.eula = new ServerEula(new File("eula.txt"));
  
          if (!this.eula.hasAcceptedEULA())
-@@ -144,7 +195,7 @@
+@@ -144,7 +196,7 @@
              {
                  this.setOnlineMode(this.settings.getBooleanProperty("online-mode", true));
                  this.setPreventProxyConnections(this.settings.getBooleanProperty("prevent-proxy-connections", false));
@@ -166,7 +166,7 @@
              }
  
              this.setCanSpawnAnimals(this.settings.getBooleanProperty("spawn-animals", true));
-@@ -180,11 +231,24 @@
+@@ -180,11 +232,24 @@
              {
                  this.setServerPort(this.settings.getIntProperty("server-port", 25565));
              }
@@ -191,7 +191,7 @@
              try
              {
                  this.getNetworkSystem().addLanEndpoint(inetaddress, this.getServerPort());
-@@ -196,13 +260,6 @@
+@@ -196,13 +261,6 @@
                  LOGGER.warn("Perhaps a server is already running on that port?");
                  return false;
              }
@@ -205,7 +205,7 @@
              }
  
              if (this.convertFiles())
-@@ -217,7 +274,7 @@
+@@ -217,7 +275,7 @@
              else
              {
                  net.minecraftforge.fml.common.FMLCommonHandler.instance().onServerStarted();
@@ -214,7 +214,7 @@
                  long j = System.nanoTime();
  
                  if (this.getFolderName() == null)
-@@ -254,6 +311,7 @@
+@@ -254,6 +312,7 @@
                      worldtype = WorldType.DEFAULT;
                  }
  
@@ -222,7 +222,7 @@
                  this.isCommandBlockEnabled();
                  this.getOpPermissionLevel();
                  this.isSnooperEnabled();
-@@ -271,8 +329,10 @@
+@@ -271,8 +330,10 @@
                  long i1 = System.nanoTime() - j;
                  String s3 = String.format("%.3fs", (double)i1 / 1.0E9D);
                  LOGGER.info("Done ({})! For help, type \"help\" or \"?\"", (Object)s3);
@@ -234,7 +234,7 @@
                  if (this.settings.hasProperty("announce-player-achievements"))
                  {
                      this.worlds[0].getGameRules().setOrCreateGameRule("announceAdvancements", this.settings.getBooleanProperty("announce-player-achievements", true) ? "true" : "false");
-@@ -287,21 +347,32 @@
+@@ -287,21 +348,32 @@
                      this.rconQueryThread.startThread();
                  }
  
@@ -275,7 +275,7 @@
                  Items.AIR.getSubItems(CreativeTabs.SEARCH, NonNullList.create());
                  // <3 you Grum for this, saves us ~30 patch files! --^
                  return net.minecraftforge.fml.common.FMLCommonHandler.instance().handleServerStarting(this);
-@@ -427,11 +498,20 @@
+@@ -427,11 +499,20 @@
  
      public void executePendingCommands()
      {
@@ -300,7 +300,7 @@
      }
  
      public boolean isDedicatedServer()
-@@ -593,7 +673,10 @@
+@@ -593,7 +674,10 @@
      }
  
      //Forge: Enable formated text for colors in console.
@@ -312,7 +312,7 @@
  
      protected boolean convertFiles() throws IOException
      {
-@@ -684,13 +767,78 @@
+@@ -684,13 +768,78 @@
  
      public String getPlugins()
      {

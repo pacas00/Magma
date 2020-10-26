@@ -170,6 +170,41 @@
       "name": "com.typesafe:config:1.2.1",
       "repo": "https://repo.maven.apache.org/maven2",
       "md5": "3aaf3c6e76a68e732c17d4a7e9877d81"
+    },
+    {
+      "name": "net.minecrell:terminalconsoleappender:1.1.1",
+      "repo": "https://repo.maven.apache.org/maven2",
+      "md5": "a190e88073a41dfa1b1d47854c41230b"
+    },
+    {
+      "name": "net.sf.trove4j:trove4j:3.0.3",
+      "repo": "https://repo.maven.apache.org/maven2",
+      "md5": "8fc4d4e0129244f9fd39650c5f30feb2"
+    },
+    {
+      "name": "org.slf4j:slf4j-api:1.7.25",
+      "repo": "https://repo.maven.apache.org/maven2",
+      "md5": "8fc4d4e0129244f9fd39650c5f30feb2"
+    },
+    {
+      "name": "org.slf4j:slf4j-api:1.7.25",
+      "repo": "https://repo.maven.apache.org/maven2",
+      "md5": "caafe376afb7086dcbee79f780394ca3"
+    },
+    {
+      "name": "org.apache.logging.log4j:log4j-iostreams:2.8.1",
+      "repo": "https://repo.maven.apache.org/maven2",
+      "md5": "18aca15b0b1e915ee091750aed65af73"
+    },
+    {
+      "name": "org.apache.logging.log4j:log4j-slf4j-impl:2.8.1",
+      "repo": "https://repo.maven.apache.org/maven2",
+      "md5": "3d33552faea500cc4fd0414cf2abdca7"
+    },
+    {
+      "name": "com.lmax:disruptor:3.4.2",
+      "repo": "https://repo.maven.apache.org/maven2",
+      "md5": "6895a3c4f54cf92eef6530e9e2cd3c46"
     }
   ]
 }

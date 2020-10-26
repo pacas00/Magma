@@ -20,7 +20,6 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.magmafoundation.magma.Magma;
 import org.magmafoundation.magma.patcher.Patcher;
 import org.magmafoundation.magma.remapper.ClassLoaderContext;
-import org.magmafoundation.magma.remapper.mappingsModel.ClassMappings;
 import org.magmafoundation.magma.remapper.utils.RemappingUtils;
 
 /**
@@ -28,6 +27,7 @@ import org.magmafoundation.magma.remapper.utils.RemappingUtils;
  */
 public final class PluginClassLoader extends URLClassLoader {
 
+    public JavaPlugin getPlugin() { return plugin; } // Spigot
     final JavaPlugin plugin;
     private final JavaPluginLoader loader;
     private final Map<String, Class<?>> classes = new java.util.concurrent.ConcurrentHashMap<String, Class<?>>(); // Spigot
@@ -40,6 +40,7 @@ public final class PluginClassLoader extends URLClassLoader {
     private JavaPlugin pluginInit;
     private IllegalStateException pluginState;
     private Patcher patcher;
+    private java.util.logging.Logger logger; // Paper - add field
 
     static {
         try {
@@ -64,6 +65,8 @@ public final class PluginClassLoader extends URLClassLoader {
         this.jar = new JarFile(file);
         this.manifest = jar.getManifest();
         this.url = file.toURI().toURL();
+
+        this.logger = com.destroystokyo.paper.utils.PaperPluginLogger.getLogger(description); // Paper - Register logger early
 
         this.patcher = Magma.getInstance().getPatcherManager().getPatchByName(description.getName());
 
@@ -100,11 +103,8 @@ public final class PluginClassLoader extends URLClassLoader {
         Class<?> result;
         try {
             if (name.startsWith("net.minecraft.server." + Magma.getBukkitVersion())) {
-                ClassMappings remappedClass = RemappingUtils.jarMapping.byNMSName.get(name);
-                if (remappedClass == null) {
-                    throw new ClassNotFoundException(name);
-                }
-                return Class.forName(remappedClass.getMcpName());
+                String remappedClass = RemappingUtils.jarMapping.byNMSName.get(name).getMcpName();
+                return Class.forName(remappedClass);
             }
 
             if (name.startsWith("org.bukkit.")) {
@@ -161,6 +161,7 @@ public final class PluginClassLoader extends URLClassLoader {
         pluginState = new IllegalStateException("Initial initialization");
         this.pluginInit = javaPlugin;
 
+        javaPlugin.logger = this.logger; // Paper - set logger
         javaPlugin.init(loader, loader.server, description, dataFolder, file, this);
     }
 

@@ -173,8 +173,8 @@
     },
     {
       "name": "net.minecrell:terminalconsoleappender:1.1.1",
-      "repo": "https://repo.maven.apache.org/maven2",
-      "md5": "a190e88073a41dfa1b1d47854c41230b"
+      "repo": "https://repo.hexeption.dev/repository/magma/",
+      "md5": "cdc2eaa6e4d928ac3644f5bd3f21e8c1"
     },
     {
       "name": "net.sf.trove4j:trove4j:3.0.3",

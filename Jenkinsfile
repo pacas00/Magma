@@ -30,18 +30,18 @@ pipeline {
             }
         }
 
-        stage('Release') {
-            when {
-                not {
-                    changeRequest()
-                }
-            }
-            steps {
-                withCredentials([string(credentialsId: 'GITHUB_TOKEN', variable: 'GITHUB_TOKEN')]) {
-                    sh 'chmod +x gradlew && ./gradlew githubRelease --console=plain'
-                }
-            }
-        }
+//         stage('Release') {
+//             when {
+//                 not {
+//                     changeRequest()
+//                 }
+//             }
+//             steps {
+//                 withCredentials([string(credentialsId: 'GITHUB_TOKEN', variable: 'GITHUB_TOKEN')]) {
+//                     sh 'chmod +x gradlew && ./gradlew githubRelease --console=plain'
+//                 }
+//             }
+//         }
     }
     post {
         always {

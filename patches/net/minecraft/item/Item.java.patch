@@ -9,3 +9,12 @@
      }
  
      /**
+@@ -925,7 +925,7 @@
+     {
+         stack.itemDamage = damage;
+ 
+-        if (stack.itemDamage < 0)
++        if (stack.itemDamage < 0 && stack.item != Items.MAP)
+         {
+             stack.itemDamage = 0;
+         }

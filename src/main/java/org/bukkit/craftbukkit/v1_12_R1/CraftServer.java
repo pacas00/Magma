@@ -91,6 +91,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerChatTabCompleteEvent;
 import org.bukkit.event.server.BroadcastMessageEvent;
+import org.bukkit.event.server.MapInitializeEvent;
 import org.bukkit.event.server.TabCompleteEvent;
 import org.bukkit.event.world.WorldInitEvent;
 import org.bukkit.event.world.WorldLoadEvent;
@@ -1265,9 +1266,37 @@ public final class CraftServer implements Server {
     public CraftMapView createMap(World world) {
         Validate.notNull(world, "World cannot be null");
 
-        net.minecraft.item.ItemStack stack = new net.minecraft.item.ItemStack(Items.MAP, 1, -1);
-        MapData worldmap = Items.FILLED_MAP.getMapData(stack, ((CraftWorld) world).getHandle());
-        return worldmap.mapView;
+        //net.minecraft.item.ItemStack stack = new net.minecraft.item.ItemStack(Items.MAP, 1, -1);
+        //MapData worldmap = Items.FILLED_MAP.getMapData(stack, ((CraftWorld) world).getHandle());
+        //return worldmap.mapView;
+
+        //Original code fails for unknown reasons. Stack meta keeps being reset to 0, which doesn't happen in decomp, only in release
+        //Following code copied from Items.FILLED_MAP.getMapData and cleaned up.
+
+        net.minecraft.world.World worldIn = ((CraftWorld) world).getHandle();
+        net.minecraft.world.World worldMain = worldIn.getServer().getServer().worlds[0]; // CraftBukkit - store reference to primary world
+
+        //Generate the ID upfront, we have to store this and NEVER rely on the stack being correct.
+        int i = worldMain.getUniqueDataId("map");
+        net.minecraft.item.ItemStack stack = new net.minecraft.item.ItemStack(Items.MAP, 1, i);
+        String s = "map_" + i;
+
+        MapData mapdata = null;
+
+        //This call doesn't work for reasons unknown
+        stack.setItemDamage(i);
+
+        mapdata = new MapData(s);
+        mapdata.scale = 3;
+        mapdata.calculateMapCenter((double)worldIn.getWorldInfo().getSpawnX(), (double)worldIn.getWorldInfo().getSpawnZ(), mapdata.scale);
+        mapdata.dimension = ((WorldServer) worldIn).dimension; // CraftBukkit - fixes Bukkit multiworld maps
+        mapdata.markDirty();
+        worldMain.setData(s, mapdata);
+
+        MapInitializeEvent event = new MapInitializeEvent(mapdata.mapView);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+
+        return mapdata.mapView;
     }
 
     @Override
